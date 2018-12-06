@@ -1,0 +1,54 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Example of Warhammer Age of Sigmar: Champions card tooltips</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.js"></script>
+    <script src="/js/externs/warhammer-card-tooltip.min.js"></script>
+</head>
+<body>
+
+<h1>Basic Usage With Self Styling</h1>
+<p>
+    Lorem ipsum <span class="warhammer-card-name">Aetherwing Scout</span> sit amet, <span data-card-name="Abjuration" class="warhammer-card-name">consectetur adipiscing elit</span>.
+    The card <span class="warhammer-card-name">Wibbly Wobblechops</span> doesn't exist, so it is not highlighted.
+</p>
+
+<script>
+  warhammerCardTooltip.init({
+    injectDefaultStyle: false
+  })
+</script>
+
+<style>
+    .warhammer-card-name {
+        color: red;
+        text-transform: uppercase;
+    }
+
+    .warhammer-card-name-active {
+        background: red;
+        color: white;
+    }
+
+    .warhammer-card-tooltip img {
+        width: 300px;
+        max-width: 80vw;
+        height: auto;
+        opacity: 0;
+        pointer-events: none;
+        position: relative;
+        transform: rotate(0) scale(0);
+        transition: opacity 500ms, transform 1000ms;
+    }
+
+    .warhammer-card-tooltip-visible img {
+        opacity: 1;
+        transform: rotate(360deg) scale(1);
+    }
+</style>
+
+</body>
+</html>

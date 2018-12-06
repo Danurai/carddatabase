@@ -1,0 +1,55 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Example of Warhammer Age of Sigmar: Champions card tooltips</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.js"></script>
+    <script src="/js/externs/warhammer-card-tooltip.min.js"></script>
+   <!-- jquery -->
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
+  <!-- Bootstrap && fontawesome -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity= "sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+    <script defer=true src="https://use.fontawesome.com/releases/v5.4.0/js/all.js"></script>
+    <script src="/js/externs/warhammer-card-tooltip.min.js"></script>
+    <script>
+      $(document).ready(function () {
+      
+        const query = {
+          size: 406,
+          sort: [{"name.keyword": "asc"}]
+        };
+        const req = fetch("https://carddatabase.warhammerchampions.com/warhammer-cards/_search", {
+          method: "POST",
+          headers: {"Content-Type": "application/json"},
+          body: JSON.stringify(query)
+        })
+
+        // Display the result
+        req
+          .then(function (resp) {
+            return resp.json();
+          })
+          .then(function (myJson) {
+            //console.log(myJson.hits.hits);
+            //$('#output').html(JSON.stringify(myJson.hits.hits));
+            $('#output').empty();
+            $.each(myJson.hits.hits, function (id,crd) {
+              $('#output').append('<div>' + JSON.stringify(crd._source) + ',</div>');
+            });
+          });
+        
+      });
+    </script>
+</head>
+<body>
+  <div class="container my-3">
+    <div><a href="/index.html">Index.html Example</a></div>
+    <div><a href="/self-style.html">self-style.html Example</a></div>
+    
+    <div id="output"></div>
+  </div>
+</body>
+</html>

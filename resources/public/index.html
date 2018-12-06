@@ -1,0 +1,108 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Example of Warhammer Age of Sigmar: Champions card tooltips</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.js"></script>
+    <script src="/js/externs/warhammer-card-tooltip.min.js"></script>
+    <style>
+        li {
+            margin-bottom: 1em;
+        }
+    </style>
+</head>
+<body>
+
+<h1>Basic Usage</h1>
+<p>
+    Lorem ipsum <span class="warhammer-card-name">Aetherwing Scout</span> sit amet, <span data-card-name="Abjuration" class="warhammer-card-name">consectetur adipiscing elit</span>.
+    The card <span class="warhammer-card-name">Wibbly Wobblechops</span> doesn't exist, so it is not highlighted.
+</p>
+<script>
+  warhammerCardTooltip.init()
+</script>
+
+<h1>Advanced Usage</h1>
+<ul>
+    <li id="find-card-links">Find card links using a different function: <span>Aetherwing Scout</span></li>
+    <li id="get-card-name">Use an alternate method of getting card names: <span>Badger</span> and <span>Mushroom</span></li>
+    <li id="activate-card-link">Different logic to mark a link as activated: <span>Aetherwing Scout</span></li>
+    <li id="create-tooltip">Create an alternate tooltip structure: <span>Charging Black Knight</span></li>
+    <li id="no-tooltip">Don't create a tooltip at all, use the returned data to decorate the name: <span>Aspect of the Sea</span>, <span>Akhelian Barrier Guard</span>, <span>Battle Glory</span></li>
+    <li id="link-to-database">Link to card database: <span>Bellowing Blade</span></li>
+    <li id="popper-options">Change the position of the tooltip: <span>Carrion Feast</span></li>
+</ul>
+<script>
+  warhammerCardTooltip.init({
+    findCardLinks: () => document.querySelectorAll("#find-card-links span")
+  })
+
+  warhammerCardTooltip.init({
+    findCardLinks: () => document.querySelectorAll("#get-card-name span"),
+    getCardName: (el) => el.innerHTML.match(/badger/i) ? "Aetherwing Scout" : "Abjuration"
+  })
+
+  warhammerCardTooltip.init({
+    findCardLinks: () => document.querySelectorAll("#activate-card-link span"),
+    activateCardLink: ({element, name}) => {
+      console.log("I activated a link for", name)
+      element.style.backgroundColor = "pink"
+    }
+  })
+
+  warhammerCardTooltip.init({
+    findCardLinks: () => document.querySelectorAll("#create-tooltip span"),
+    cardFields: ["alliance"],
+    createTooltip: (cardLink, cardData, cardImagesBaseUrl, options) => {
+      // Show all images instead of just the default one
+      const availableSkus = cardData.skus.filter(s => s.lang === options.language && s.finish === "matte")
+      const div = $("<div/>").append(
+        $("<div/>").text(cardData.alliance),
+        $("<h1/>").text(cardData.name),
+        $("<div/>").append(
+          availableSkus.map(sku => $("<img/>", {src: `${cardImagesBaseUrl}/${sku.id}.jpg`}).css({height: "200px"}))
+        ).css({
+          display: "flex",
+          justifyContent: "space-evenly"
+        })
+      ).css({
+        display: "none",
+        background: "red",
+        padding: "1em",
+        borderRadius: "100%"
+      })
+      return div.get(0)
+    },
+    onMouseOver: (ev, tooltip) => tooltip.style.display = "block",
+    onMouseOut: (ev, tooltip) => tooltip.style.display = "none"
+  })
+
+  warhammerCardTooltip.init({
+    findCardLinks: () => document.querySelectorAll("#no-tooltip span"),
+    createTooltip: () => null,
+    cardFields: ["category"],
+    activateCardLink: ({element, name}, cardData) => {
+      $(element).text((i, t) => t + ` (${cardData.category.en})`)
+    }
+  })
+
+  warhammerCardTooltip.init({
+    findCardLinks: () => document.querySelectorAll("#link-to-database span"),
+    linkToCardDatabase: true
+  })
+
+  warhammerCardTooltip.init({
+    findCardLinks: () => document.querySelectorAll("#popper-options span"),
+    popperOptions: {
+      flip: {
+        enabled: false
+      },
+      placement: "top"
+    }
+  })
+</script>
+
+</body>
+</html>
