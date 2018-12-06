@@ -31,32 +31,7 @@
 
   :source-paths ["src"]
 
-  :cljsbuild {:builds
-              [{:id "dev"
-                :source-paths ["src"]
-
-                ;; The presence of a :figwheel configuration here
-                ;; will cause figwheel to inject the figwheel client
-                ;; into your build
-                :figwheel true
-
-                :compiler {:main cardtooltip.core
-                           :asset-path "js/compiled/out"
-                           :output-to "resources/public/js/compiled/cardtooltip.js"
-                           :output-dir "resources/public/js/compiled/out"
-                           :source-map-timestamp true
-                           ;; To console.log CLJS data-structures make sure you enable devtools in Chrome
-                           ;; https://github.com/binaryage/cljs-devtools
-                           :preloads [devtools.preload]}}
-               ;; This next build is a compressed minified build for
-               ;; production. You can build this with:
-               ;; lein cljsbuild once min
-               {:id "min"
-                :source-paths ["src"]
-                :compiler {:output-to "resources/public/js/compiled/cardtooltip.js"
-                           :main cardtooltip.core
-                           :optimizations :advanced
-                           :pretty-print false}}]}
+  :cljsbuild {:builds []}
 
   :figwheel { :css-dirs ["resources/public/css"]}
 
@@ -64,8 +39,8 @@
   ;; Please see:
   ;; https://github.com/bhauman/lein-figwheel/wiki/Using-the-Figwheel-REPL-within-NRepl
   :profiles {:uberjar {:aot :all
-                       :source-paths ["src"]
-                       :prep-tasks ["compile" ["cljsbuild" "once" "min"]]}
+                       :source-paths ["src"]}
+                       ;; :prep-tasks ["compile" ["cljsbuild" "once" "min"]]}
             :dev {:dependencies [[reloaded.repl "0.2.4"]
                                [expectations "2.2.0-rc3"]
                                [binaryage/devtools "0.9.4"]

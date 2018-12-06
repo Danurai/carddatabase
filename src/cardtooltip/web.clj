@@ -46,9 +46,9 @@
 
 (defroutes app-routes
   (GET "/" req
-    (response (slurp (io/resource "public/home.html"))))
-  (GET "/carddatabase" []
     carddatabase-handler)
+  (GET "/home" []
+    (response (slurp (io/resource "public/home.html"))))
   (GET "/api/carddatabase" []
     (-> (io/resource "private/carddatabase.json")
         slurp

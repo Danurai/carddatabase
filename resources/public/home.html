@@ -34,11 +34,11 @@
           })
           .then(function (myJson) {
             //console.log(myJson.hits.hits);
-            //$('#output').html(JSON.stringify(myJson.hits.hits));
-            $('#output').empty();
-            $.each(myJson.hits.hits, function (id,crd) {
-              $('#output').append('<div>' + JSON.stringify(crd._source) + ',</div>');
-            });
+            $('#output').html(JSON.stringify(myJson.hits.hits));
+            //$('#output').empty();
+            //$.each(myJson.hits.hits, function (id,crd) {
+            //  $('#output').append('<div>' + JSON.stringify(crd._source) + ',</div>');
+            //});
           });
         
       });
@@ -46,6 +46,7 @@
 </head>
 <body>
   <div class="container my-3">
+    <div><a href="/">carddatabase</a></div>
     <div><a href="/index.html">Index.html Example</a></div>
     <div><a href="/self-style.html">self-style.html Example</a></div>
     
