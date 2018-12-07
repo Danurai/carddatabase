@@ -40,7 +40,7 @@
             $.each(myJson.hits.hits, function (id,crd) {
                 carddata.push(crd._source)
             });
-            $('#output').val(JSON.stringify(carddata));
+            $('#output').html(JSON.stringify(carddata));
           });
         
       });
