@@ -34,13 +34,13 @@
           })
           .then(function (myJson) {
             //console.log(myJson.hits.hits);
-            //$('#output').html(JSON.stringify(myJson.hits.hits));
+            $('#output').html(JSON.stringify(myJson.hits.hits));
             //$('#output').empty();
-            var carddata = [];
-            $.each(myJson.hits.hits, function (id,crd) {
-                carddata.push(crd._source)
-            });
-            $('#output').html(JSON.stringify(carddata));
+            //var carddata = [];
+            //$.each(myJson.hits.hits, function (id,crd) {
+            //     carddata.push(crd._source)
+            //});
+            //$('#output').html(JSON.stringify(carddata));
           });
         
       });
