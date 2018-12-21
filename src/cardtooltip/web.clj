@@ -8,7 +8,29 @@
             [ring.util.response :refer [response resource-response content-type redirect]]
             [ring.middleware.params :refer [wrap-params]]
             [ring.middleware.keyword-params :refer [wrap-keyword-params]]
-            [ring.middleware.session :refer [wrap-session]]))
+            [ring.middleware.session :refer [wrap-session]]
+			[cardtooltip.tools :as tools]))
+			
+(def decks ["_wED9DexgA==" "_wEB1ARxhwHFBvmOAcaZQJQDAQwWlwMwMXSl"])
+			
+(defn- parse-handler [req]
+  (h/html5
+    [:head
+      [:meta {:charset "UTF-8"}]
+      [:meta {:name "viewport" :content "width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0"}]
+      [:meta {:http-equiv "X-UA-Compatible" :content "ie=edge"}]
+      [:script {:src "https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.js"}]
+      [:link {:href "https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" :rel "stylesheet" :integrity "sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" :crossorigin "anonymous"}]
+      [:script {:src "https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" :integrity "sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" :crossorigin "anonymous"}]
+      [:script {:src "https://cdnjs.cloudflare.com/ajax/libs/taffydb/2.7.3/taffy-min.js" :integrity "sha256-fKCEY8Tw1ywvNmNo7LXWhLLCkh+AP8ABrNR5S3SmSvs=" :crossorigin "anonymous"}]
+      [:script {:src "/js/externs/warhammer-card-tooltip.min.js"}]
+      (h/include-css "/css/style.css")]
+	[:body
+	  [:div.container 
+	    (for [deck decks]
+		  [:div 
+			[:div deck]
+			[:div (-> deck tools/parsedeck str)]])]]))
 
 (defn- carddatabase-handler [req]
   (h/html5
@@ -26,6 +48,11 @@
       ]
     [:body
       [:div.container.my-3
+		[:div 
+		  [:a.mr-2 {:href "/home.html"} "Home"]
+		  [:a.mr-2 {:href "/index.html"} "index"]
+		  [:a.mr-2 {:href "/self-style.html"} "Self-style"]
+		  [:a.mr-2 {:href "/parse"} "Parse"]]
         [:div.row.mb-2
           [:form 
             [:input#filter.form-control]]]
@@ -49,6 +76,8 @@
     carddatabase-handler)
   (GET "/home" []
     (response (slurp (io/resource "public/home.html"))))
+  (GET "/parse" []
+    parse-handler)
   (GET "/api/carddatabase" []
     (-> (io/resource "private/carddatabase.json")
         slurp

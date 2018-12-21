@@ -23,7 +23,8 @@
                [clj-http "3.7.0"]
               ; page rendering
                [hiccup "1.0.5"]
-               [reagent "0.7.0"]]
+               [reagent "0.7.0"]
+			   [funcool/octet "1.1.2"]]
 
   :plugins [[lein-figwheel "0.5.14"]
            [lein-cljsbuild "1.1.7" :exclusions [[org.clojure/clojure]]]
