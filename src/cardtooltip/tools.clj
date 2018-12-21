@@ -32,6 +32,7 @@
 
 (defn- getVersionAndData [raw]
   (let [view (map int raw)]
+	(prn (->> raw String. (map int) first))
     (if (= (->> raw String. (map int) first) 0xFF)
         [(nth view 1) (nthrest view 2)]
         [0 view])))        
