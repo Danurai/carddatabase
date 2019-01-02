@@ -13,6 +13,7 @@
 (def ^:const BYTES_PER_CARD 5)
 
 (def wh-spec (buf/spec :count buf/byte :id buf/int32))
+(def vn-spec (buf/spec :check buf/byte :id buf/byte))
 
 ; RYO instad of octet
 ;
@@ -32,10 +33,10 @@
 
 (defn- getVersionAndData [raw]
   (let [view (map int raw)]
-    [(nth view 1) (nthrest view 2)]))
-;    (if (= (->> raw String. (map int) first) 0xFF)
-;        [(nth view 1) (nthrest view 2)]
-;        [0 view])))        
+    (prn "Test and 0xFF: " (and (first raw) 0xFF))
+    (if (= (->> raw String. (map int) first) 0xFF)
+        [(nth view 1) (nthrest view 2)]
+        [0 view])))        
         
 (defn- getCards [cards]
   (let [n (count cards)
