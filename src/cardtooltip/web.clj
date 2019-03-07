@@ -53,6 +53,7 @@
 		  [:a.mr-2 {:href "/index.html"} "index"]
 		  [:a.mr-2 {:href "/self-style.html"} "Self-style"]
 		  [:a.mr-2 {:href "/parse"} "Parse"]]
+		  [:a.mr-2 {:href "/_search"} "carddatabase.warhammerchampions.com/warhammer-cards/_search"]]
         [:div.row.mb-2
           [:form 
             [:input#filter.form-control]]]
@@ -70,6 +71,14 @@
                 [:th {:scope "col"} "Wave"]
                 ]]
             [:tbody#tblbody]]]]]))
+            
+(defn- search-handler [req]
+  (h/html5     
+    [:head 
+      [:meta {:charset "UTF-8" :content-type "application/json"}]
+      [:script {:src "https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.js"}]
+      (h/include-js "js/carddatabase_search.js")]
+    [:body]))
 
 (defroutes app-routes
   (GET "/" req
@@ -78,22 +87,25 @@
     (response (slurp (io/resource "public/home.html"))))
   (GET "/parse" []
     parse-handler)
+  (GET "/_search" []
+    search-handler)
   (GET "/api/carddatabase" []
     (-> (io/resource "private/carddatabase.json")
         slurp
         response
         (content-type "application/json")))
-  ;;(GET "/_mapping" []
-  ;;  (try 
-  ;;    (client/get "https://carddatabase.warhammerchampions.com/warhammer-cards/_mapping" {:insecure? true})
-  ;;    (catch Exception e (prn e))))
-  ;;(GET "/_search" []
-  ;;  (try
-  ;;    (client/post "https://carddatabase.warhammerchampions.com/warhammer-cards/_mapping" {
-  ;;      :content-type :json
-  ;;      :body (json/write-str {})
-  ;;    })
-  ;;    (catch Exception e (prn e))))
+;; https://www.warhammerchampions.com/decks-and-packs/card-data-api-access/
+;  (GET "/_mapping" []
+;    (try 
+;      (client/get "https://carddatabase.warhammerchampions.com/warhammer-cards/_mapping" {:insecure? true})
+;      (catch Exception e (prn e))))
+;  (GET "/_search" []
+;    (try
+;      (client/post "https://carddatabase.warhammerchampions.com/warhammer-cards/_search" {
+;        :headers {"Content-Type" "application/json"}
+;        ;:body (json/write-str {})
+;      })
+;      (catch Exception e (prn e))))
   (resources "/"))
    
 (def app 

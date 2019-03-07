@@ -13,7 +13,6 @@
 (def ^:const BYTES_PER_CARD 5)
 
 (def wh-spec (buf/spec :count buf/byte :id buf/int32))
-(def vn-spec (buf/spec :check buf/byte :id buf/byte))
 
 ; RYO instad of octet
 ;
@@ -32,11 +31,14 @@
       (clojure.string/replace #"[- ]" "+")))
 
 (defn- getVersionAndData [raw]
-  (let [view (map int raw)]
-    (prn "Test and 0xFF: " (and (first raw) 0xFF))
-    (if (= (and (first raw) 0xFF) 255)
-        [(nth view 1) (nthrest view 2)]
-        [0 view])))        
+  (let [view (map int raw)
+       buffer (buf/allocate 2)]
+    (buf/write! buffer raw (buf/byte buf/byte))
+    (prn (buf/read buffer (buf/spec buf/byte buf/byte)))
+    [(nth view 1) (nthrest view 2)]))
+;    (if (= (->> raw String. (map int) first) 0xFF)
+;        [(nth view 1) (nthrest view 2)]
+;        [0 view])))        
         
 (defn- getCards [cards]
   (let [n (count cards)
