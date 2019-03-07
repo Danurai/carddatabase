@@ -1,8 +1,13 @@
-# ZZBase
+# Carddatabase
 
 ## Overview
 
-Base http-kit server with hiccup server-side pages and reagent cljs capability with figwheel reload.
+Warhammer: Champions card functions including tooltips, deck parsing and card search
+
+    https://www.warhammerchampions.com/decks-and-packs/card-data-api-access/
+    https://www.npmjs.com/package/@playfusion/warhammer-card-tooltip
+    https://www.npmjs.com/package/@playfusion/warhammer-deck-sharing
+
 Runs locally on PORT 9009
 
     http://localhost:9009
