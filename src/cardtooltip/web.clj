@@ -48,29 +48,29 @@
       ]
     [:body
       [:div.container.my-3
-		[:div 
-		  [:a.mr-2 {:href "/home.html"} "Home"]
-		  [:a.mr-2 {:href "/index.html"} "index"]
-		  [:a.mr-2 {:href "/self-style.html"} "Self-style"]
-		  [:a.mr-2 {:href "/parse"} "Parse"]]
-		  [:a.mr-2 {:href "/_search"} "carddatabase.warhammerchampions.com/warhammer-cards/_search"]]
-        [:div.row.mb-2
-          [:form 
-            [:input#filter.form-control]]]
-        [:div.row
-          [:table#cardtable.table.table-sm.table-hover
-            [:thead
-              [:tr
-                [:th {:scope "col"} "#"]
-                [:th {:scope "col"} "Collector #"]
-                [:th.card-tooltip {:scope "col"} "Name"]
-                [:th {:scope "col"} "Category"]
-                [:th {:scope "col"} "Alliance"]
-                [:th {:scope "col"} "Class"]  
-                [:th {:scope "col"} "Corners"]
-                [:th {:scope "col"} "Wave"]
-                ]]
-            [:tbody#tblbody]]]]]))
+        [:div 
+          [:a.mr-2 {:href "/home.html"} "Home"]
+          [:a.mr-2 {:href "/index.html"} "index"]
+          [:a.mr-2 {:href "/self-style.html"} "Self-style"]
+          [:a.mr-2 {:href "/parse"} "Parse"]]
+          [:a.mr-2 {:href "/_search"} "carddatabase.warhammerchampions.com/warhammer-cards/_search"]]
+            [:div.row.mb-2
+              [:form 
+                [:input#filter.form-control]]]
+            [:div.row
+              [:table#cardtable.table.table-sm.table-hover
+                [:thead
+                  [:tr
+                    [:th {:scope "col"} "#"]
+                    [:th {:scope "col"} "Collector #"]
+                    [:th.card-tooltip {:scope "col"} "Name"]
+                    [:th {:scope "col"} "Category"]
+                    [:th {:scope "col"} "Alliance"]
+                    [:th {:scope "col"} "Class"]  
+                    [:th {:scope "col"} "Corners"]
+                    [:th {:scope "col"} "Wave"]
+                    ]]
+                [:tbody#tblbody]]]]))
             
 (defn- search-handler [req]
   (h/html5     
