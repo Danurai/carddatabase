@@ -110,6 +110,7 @@
         (content-type "application/json")))
   (GET "/source/carddata" []
     (-> (getsearch (cardcount))
+	:body
         response
         (content-type "application/json")))        
   (resources "/"))
