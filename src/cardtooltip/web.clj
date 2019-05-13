@@ -125,7 +125,10 @@
   (GET "/source/customsource" []
     custom-source-handler)
   (POST "/source/customsource" [url]
-    (response (getsearchurl url)))
+    (-> (getsearchurl url)
+        :body
+        response
+        (content-type "application/json")))
   (resources "/"))
    
 (def app 
