@@ -92,15 +92,7 @@
       :total))
       
 (defn getsearchurl [ url ]
-  (http/post url))
-  
-;(defn- search-handler [req]
-;  (h/html5     
-;    [:head 
-;      [:meta {:charset "UTF-8" :content-type "application/json"}]
-;      [:script {:src "https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.js"}]
-;      (h/include-js "js/carddatabase_search.js")]
-;    [:body]))
+  (http/get url))
     
 (defn- custom-source-handler [req]
   (h/html5
@@ -133,10 +125,7 @@
   (GET "/source/customsource" []
     custom-source-handler)
   (POST "/source/customsource" [url]
-    (-> (getsearchurl url)
-        :body
-        response
-        (content-type "application/json")))
+    (response (getsearchurl url)))
   (resources "/"))
    
 (def app 
