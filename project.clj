@@ -11,11 +11,11 @@
   
   :main         cardtooltip.system
   
-  :dependencies [[org.clojure/clojure "1.9.0-beta4"]
-               [org.clojure/clojurescript "1.9.946"]
+  :dependencies [[org.clojure/clojure "1.10.0"]
+               [org.clojure/clojurescript "1.10.520"]
                [org.clojure/core.async  "0.3.443"]
               ; Web server
-               [http-kit "2.2.0"]
+               [http-kit "2.3.0"]
                [com.stuartsierra/component "0.3.2"]
               ; routing
                [compojure "1.6.0"]
@@ -24,7 +24,7 @@
               ; page rendering
                [hiccup "1.0.5"]
                [reagent "0.7.0"]
-			   [funcool/octet "1.1.2"]]
+               [funcool/octet "1.1.2"]]
 
   :plugins [[lein-figwheel "0.5.14"]
            [lein-cljsbuild "1.1.7" :exclusions [[org.clojure/clojure]]]

@@ -1,15 +1,16 @@
 (ns cardtooltip.web
-   (:require [clojure.java.io :as io]
-            [clojure.data.json :as json]
-            [hiccup.page :as h]
-            [compojure.core :refer [defroutes GET POST ANY context]]
-            [compojure.route :refer [not-found resources]]
-            [clj-http.client :as http]
-            [ring.util.response :refer [response resource-response content-type redirect]]
-            [ring.middleware.params :refer [wrap-params]]
-            [ring.middleware.keyword-params :refer [wrap-keyword-params]]
-            [ring.middleware.session :refer [wrap-session]]
-			[cardtooltip.tools :as tools]))
+   (:require
+    [clojure.java.io :as io]
+    [clojure.data.json :as json]
+    [hiccup.page :as h]
+    [compojure.core :refer [defroutes GET POST ANY context]]
+    [compojure.route :refer [not-found resources]]
+    [clj-http.client :as http]
+    [ring.util.response :refer [response resource-response content-type redirect]]
+    [ring.middleware.params :refer [wrap-params]]
+    [ring.middleware.keyword-params :refer [wrap-keyword-params]]
+    [ring.middleware.session :refer [wrap-session]]
+    [cardtooltip.tools :as tools]))
 			
 (def decks ["_wED9DexgA==" "_wEB1ARxhwHFBvmOAcaZQJQDAQwWlwMwMXSl"])
 
@@ -38,6 +39,7 @@
         [:li.nav-item [:a.nav-link {:href "/parse"} "Parse Deck"]]
         [:li.nav-item [:a.nav-link {:href "/local/carddata"} "local data"]]
         [:li.nav-item [:a.nav-link {:href "/source/carddata"} "source data"]]
+        [:li.nav-item [:a.nav-link {:href "/source/customsource"} "Custom source URL"]]
       ]]])
     
 			
@@ -80,7 +82,7 @@
 (defn getsearch [ size ]
     (http/post "https://carddatabase.warhammerchampions.com/warhammer-cards/_search" 
                {:content-type :json
-                :body (json/write-str {:size size :from 0})}))
+                :body (json/write-str {:size size :from 1})}))
 
 (defn cardcount []
   (-> (getsearch 1)
@@ -88,14 +90,29 @@
       (json/read-str :key-fn keyword)
       :hits
       :total))
-            
-(defn- search-handler [req]
-  (h/html5     
-    [:head 
-      [:meta {:charset "UTF-8" :content-type "application/json"}]
-      [:script {:src "https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.js"}]
-      (h/include-js "js/carddatabase_search.js")]
-    [:body]))
+      
+(defn getsearchurl [ url ]
+  (http/post url))
+  
+;(defn- search-handler [req]
+;  (h/html5     
+;    [:head 
+;      [:meta {:charset "UTF-8" :content-type "application/json"}]
+;      [:script {:src "https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.js"}]
+;      (h/include-js "js/carddatabase_search.js")]
+;    [:body]))
+    
+(defn- custom-source-handler [req]
+  (h/html5
+    header
+    [:body
+      navbar
+      [:div.container
+        [:form {:method "post" :action "/source/customsource"}
+          [:div.form-group
+            [:label {:for "#url"} "Source URL"]
+            [:input.form-control {:type "text" :placeholder "http://" :name "url"}]]
+          [:button.btn.btn-primary {:type "submit"} "Go"]]]]))
 
 (defroutes app-routes
   (GET "/" req
@@ -110,9 +127,16 @@
         (content-type "application/json")))
   (GET "/source/carddata" []
     (-> (getsearch (cardcount))
-	:body
+        :body
         response
         (content-type "application/json")))        
+  (GET "/source/customsource" []
+    custom-source-handler)
+  (POST "/source/customsource" [url]
+    (-> (getsearchurl url)
+        :body
+        response
+        (content-type "application/json")))
   (resources "/"))
    
 (def app 
