@@ -105,9 +105,9 @@
             [:label {:for "#url"} "Source URL"]
             [:input.form-control {:type "text" :placeholder "http://" :name "url"}]]
           [:button.btn.btn-primary {:type "submit"} "Go"]]
-				[:a.btn.btn-primary {:href "/source/customsource/lotrscenarios"}]]]))
+				[:a.btn.btn-primary {:href "/source/customsource/lotrscenarios"} "LotR Scenarios"]]]))
 
-(def- lotrscenarios []
+(defn- lotrscenarios []
 	(map #(
 		(http/get (str "http://ringsdb.com/api/public/scenario/" %))
 	) (range 1 107)))
