@@ -104,8 +104,14 @@
           [:div.form-group
             [:label {:for "#url"} "Source URL"]
             [:input.form-control {:type "text" :placeholder "http://" :name "url"}]]
-          [:button.btn.btn-primary {:type "submit"} "Go"]]]]))
+          [:button.btn.btn-primary {:type "submit"} "Go"]]
+				[:a.btn.btn-primary {:href "/source/customsource/lotrscenarios"}]]]))
 
+(def- lotrscenarios []
+	(map #(
+		(http/get (str "http://ringsdb.com/api/public/scenario/" %))
+	) (range 1 107)))
+				
 (defroutes app-routes
   (GET "/" req
     carddatabase-handler)
@@ -124,6 +130,11 @@
         (content-type "application/json")))        
   (GET "/source/customsource" []
     custom-source-handler)
+	(GET "/source/customsource/lotrscenarios" []
+		(-> (lotrscenarios)
+				:body
+				response
+				(content-type "application/json")))
   (POST "/source/customsource" [url]
     (-> (getsearchurl url)
         :body
