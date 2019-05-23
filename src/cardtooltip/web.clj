@@ -131,7 +131,7 @@
   (GET "/source/customsource" []
     custom-source-handler)
   (GET "/source/customsource/lotrscenarios" []
-    (-> (http/get "http:/ringsdb.com/api/public/scenario/1")
+    (-> (http/get "http://ringsdb.com/api/public/scenario/1")
 	:body
 	response
 	(content-type "application/json")))
