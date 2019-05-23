@@ -108,7 +108,10 @@
 				[:a.btn.btn-primary {:href "/source/customsource/lotrscenarios"} "LotR Scenarios"]]]))
 
 (defn- lotrscenarios []
-  (:body (http/get (str "http://ringsdb.com/api/public/scenario/" 1))))
+  (map (fn [x] 
+          (:body (http/get (str "http://ringsdb.com/api/public/scenario/" x))))
+  (range 1 107))
+)
 				
 (defroutes app-routes
   (GET "/" req
