@@ -105,10 +105,10 @@
             [:label {:for "#url"} "Source URL"]
             [:input.form-control {:type "text" :placeholder "http://" :name "url"}]]
           [:button.btn.btn-primary {:type "submit"} "Go"]]
-				[:a.btn.btn-primary {:href "/source/customsource/lotrscenarios"} "LotR Scenarios"]]]))
+				[:a.btn.btn-primary {:href "/source/customsource/lotrscenarios/10"} "LotR Scenarios"]]]))
 
-(defn- lotrscenarios []
-   (map #(http/get (str "http://ringsdb.com/api/public/scenario/" %)) (range 1 10)))
+(defn- lotrscenarios [ id ]
+   (map #(:body (http/get (str "http://ringsdb.com/api/public/scenario/" %))) (range 1 id)))
 				
 (defroutes app-routes
   (GET "/" req
@@ -128,8 +128,8 @@
         (content-type "application/json")))        
   (GET "/source/customsource" []
     custom-source-handler)
-  (GET "/source/customsource/lotrscenarios" []
-    (-> (lotrscenarios)
+  (GET "/source/customsource/lotrscenarios/:id" [id]
+    (-> (lotrscenarios id)
 	response
 	(content-type "application/json")))
   (POST "/source/customsource" [url]
