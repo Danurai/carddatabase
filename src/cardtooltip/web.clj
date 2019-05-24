@@ -108,7 +108,7 @@
 				[:a.btn.btn-primary {:href "/source/customsource/lotrscenarios/10"} "LotR Scenarios"]]]))
 
 (defn- lotrscenarios [ id ]
-   (map #(:body (http/get (str "http://ringsdb.com/api/public/scenario/" %))) (range 1 id)))
+   (map #(:body (http/get (str "http://ringsdb.com/api/public/scenario/" %))) (range 1 (read-string id))))
 				
 (defroutes app-routes
   (GET "/" req
