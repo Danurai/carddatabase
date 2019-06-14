@@ -1,17 +1,22 @@
 var _cards;
 var _filter = {};
 var _order;
+var _local = true;
+
 $(document).ready(function () {
-  $.getJSON("/api/carddatabase", function (d) {
-    _cards = TAFFY(d);
-    write_table();
-    
-  })
+  if (_local) {
+    $.getJSON("/local/carddata", function (d) {
+      _cards = TAFFY(d);
+      write_table();      
+    })
+  }
   
   $('body').on('mouseover','tr', function () {
-    warhammerCardTooltip.init({
-      findCardLinks: () => $(this).find('.card-tooltip')
-    });    
+    if (!_local) {
+      warhammerCardTooltip.init({
+        findCardLinks: () => $(this).find('.card-tooltip')
+      });    
+    }
   });
   
   $('#filter').on('input', function () {
@@ -39,21 +44,20 @@ $(document).ready(function () {
       + '<td>' + src.alliance + '</td>'
       + '<td>' + (typeof src.class !== 'undefined' ? src.class.en : '') + '</td>'
       + '<td>' + (corners (src.category.en,src.corners)) + '</td>'
-      //+ "<td>" + JSON.stringify(src.corners) + '</td>'
       + '<td>' + src.set[0].name + '</td>'
       + '</tr>';
   }
   function corners (cat, crn)  {
     var outp='';
     $.each(crn, function (id, c) {
-      if (cat == "Champion") {
+      if (cat == "Champion" && !_local) {
         outp += '<span class="mr-1">'
           + '<img class="corner" src="https://assets.warhammerchampions.com/card-database/icons/quest_' 
             + c.value.toLowerCase() 
             + (typeof c.qualifier !== 'undefined' ? '_' + c.qualifier.toLowerCase() : '') 
             + '.png"></span>';
       } else {
-        outp += '<span class="mr-1">' + c.value + '</span>';
+        outp += '<span class="mr-1">' + c.value[0] + '</span>';
       }
     });
     return outp;

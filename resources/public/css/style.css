@@ -3,3 +3,13 @@
 .corner {
   width: 30px;
 }
+
+.sortable {
+  cursor: pointer;
+}
+
+.caret {
+  font-size: 0.8em;
+  float: right;
+  color: darkred;
+}

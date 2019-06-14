@@ -11,7 +11,7 @@
     [ring.middleware.keyword-params :refer [wrap-keyword-params]]
     [ring.middleware.session :refer [wrap-session]]
     [cardtooltip.tools :as tools]))
-			
+      
 (def decks ["_wED9DexgA==" "_wEB1ARxhwHFBvmOAcaZQJQDAQwWlwMwMXSl"])
 
 (def header
@@ -23,9 +23,9 @@
       [:link {:href "https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" :rel "stylesheet" :integrity "sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" :crossorigin "anonymous"}]
       [:script {:src "https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" :integrity "sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" :crossorigin "anonymous"}]
       [:script {:src "https://cdnjs.cloudflare.com/ajax/libs/taffydb/2.7.3/taffy-min.js" :integrity "sha256-fKCEY8Tw1ywvNmNo7LXWhLLCkh+AP8ABrNR5S3SmSvs=" :crossorigin "anonymous"}]
-      [:script {:src "/js/externs/warhammer-card-tooltip.min.js"}]
+      [:script {:defer true :src "https://use.fontawesome.com/releases/v5.0.13/js/all.js"}][:script {:src "/js/externs/warhammer-card-tooltip.min.js"}]
       (h/include-js "/js/externs/warhammer-card-tooltip.min.js")
-      (h/include-css "/css/style.css")])
+      (h/include-css "/css/style.css?v=1.0")])
       
 (def navbar
   [:nav.navbar.navbar-dark.bg-dark.navbar-expand-lg
@@ -37,12 +37,15 @@
         [:li.nav-item [:a.nav-link {:href "/index.html"} "Basic Styling"]]
         [:li.nav-item [:a.nav-link {:href "/self-style.html"} "Self Styling"]]
         [:li.nav-item [:a.nav-link {:href "/parse"} "Parse Deck"]]
-        [:li.nav-item [:a.nav-link {:href "/local/carddata"} "local data"]]
-        [:li.nav-item [:a.nav-link {:href "/source/carddata"} "source data"]]
+        [:li.nav-item.dropdown
+          [:a#apinav.nav-link.dropdown-toggle {:href "#" :role "button" :data-toggle "dropdown"} "API"]
+          [:div.dropdown-menu
+            [:a.dropdown-item {:href "/local/carddata"} "local data"]
+            [:a.dropdown-item {:href "/source/carddata"} "source data"]]]
         [:li.nav-item [:a.nav-link {:href "/source/customsource"} "Custom source URL"]]
       ]]])
     
-			
+      
 (defn- parse-handler [req]
   (h/html5
     header
@@ -68,16 +71,17 @@
           [:table#cardtable.table.table-sm.table-hover
             [:thead
               [:tr
-                [:th {:scope "col"} "#"]
-                [:th {:scope "col"} "Collector #"]
-                [:th.card-tooltip {:scope "col"} "Name"]
-                [:th {:scope "col"} "Category"]
-                [:th {:scope "col"} "Alliance"]
-                [:th {:scope "col"} "Class"]  
+                [:th.sortable {:scope "col"} "#"]
+                [:th.sortable {:scope "col"} "Collector #"]
+                [:th.sortable {:scope "col"} "Name"]
+                [:th.sortable {:scope "col"} "Category"]
+                [:th.sortable {:scope "col"} "Alliance"]
+                [:th.sortable {:scope "col"} "Class"]  
                 [:th {:scope "col"} "Corners"]
-                [:th {:scope "col"} "Wave"]
+                [:th.sortable {:scope "col"} "Wave"]
                 ]]
-            [:tbody#tblbody]]]]]))
+            [:tbody#tblbody]]]]
+    (h/include-js "/js/tablesort.js?v=1")]))
             
 (defn getsearch [ size ]
     (http/post "https://carddatabase.warhammerchampions.com/warhammer-cards/_search" 
@@ -104,12 +108,11 @@
           [:div.form-group
             [:label {:for "#url"} "Source URL"]
             [:input.form-control {:type "text" :placeholder "http://" :name "url"}]]
-          [:button.btn.btn-primary {:type "submit"} "Go"]]
-				[:a.btn.btn-primary {:href "/source/customsource/lotrscenarios/10"} "LotR Scenarios"]]]))
+          [:button.btn.btn-primary {:type "submit"} "Go"]]]]))
 
-(defn- lotrscenarios [ id ]
-   (map #(:body (http/get (str "http://ringsdb.com/api/public/scenario/" %))) (range 1 (read-string id))))
-				
+;(defn- lotrscenarios [ id ]
+;   (map #(:body (http/get (str "http://ringsdb.com/api/public/scenario/" %))) (range 1 (read-string id))))
+        
 (defroutes app-routes
   (GET "/" req
     carddatabase-handler)
@@ -128,10 +131,10 @@
         (content-type "application/json")))        
   (GET "/source/customsource" []
     custom-source-handler)
-  (GET "/source/customsource/lotrscenarios/:id" [id]
-    (-> (lotrscenarios id)
-	response
-	(content-type "application/json")))
+  ;(GET "/source/customsource/lotrscenarios/:id" [id]
+  ;  (-> (lotrscenarios id)
+  ;      response
+  ;      (content-type "application/json")))
   (POST "/source/customsource" [url]
     (-> (getsearchurl url)
         :body
